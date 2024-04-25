@@ -9,9 +9,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ISellerReport } from '../../../shared/models/seller';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Observable, Subject, map, startWith } from 'rxjs';
 import { AsyncPipe, CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { IApiResponse } from '../../../shared/models/api';
+import { environment } from '../../../../environments/environment';
 
 interface Item {
   id: number,
@@ -44,6 +47,7 @@ interface NumberItem {
   styleUrl: './seller.component.scss'
 })
 export class SellerComponent implements AfterViewInit, OnInit {
+  formGroup: FormGroup
   displayedColumns: string[] = ['sellerId', 'sellerName', 'comission', 'month', 'year'];
   dataSource: MatTableDataSource<ISellerReport>;
 
@@ -70,78 +74,22 @@ export class SellerComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor() {
+  constructor(
+    private readonly formBuilder: FormBuilder,
+    private readonly http: HttpClient
+  ) {
     let now = new Date()
     let year = now.getFullYear()
     for (let index = year; index > year - 50; index--) {
       this.years.push({name: index})
     }
-    let data: ISellerReport[] = [
-      {
-        sellerId: '1',
-        sellerName: 'Juan',
-        comission: 4500,
-        subtotal: 45000,
-        month: 5,
-        year: 2017
-      },
-      {
-        sellerId: '1',
-        sellerName: 'Juan',
-        comission: 4500,
-        subtotal: 45000,
-        month: 5,
-        year: 2017
-      },
-      {
-        sellerId: '1',
-        sellerName: 'Juan',
-        comission: 4500,
-        subtotal: 45000,
-        month: 5,
-        year: 2017
-      },
-      {
-        sellerId: '1',
-        sellerName: 'Juan',
-        comission: 4500,
-        subtotal: 45000,
-        month: 5,
-        year: 2017
-      },
-      {
-        sellerId: '1',
-        sellerName: 'Juan',
-        comission: 4500,
-        subtotal: 45000,
-        month: 5,
-        year: 2017
-      },
-      {
-        sellerId: '1',
-        sellerName: 'Juan',
-        comission: 4500,
-        subtotal: 45000,
-        month: 5,
-        year: 2017
-      },
-      {
-        sellerId: '1',
-        sellerName: 'Juan',
-        comission: 4500,
-        subtotal: 45000,
-        month: 5,
-        year: 2017
-      },
-      {
-        sellerId: '1',
-        sellerName: 'Juan',
-        comission: 4500,
-        subtotal: 45000,
-        month: 5,
-        year: 2017
-      },
-    ]
+
+    this.formGroup = this.formBuilder.group({
+      year: new FormControl({ value: undefined, disabled: false }, { validators: [Validators.required, Validators.min(1900)] }),
+      month: new FormControl({ value: undefined, disabled: false }, { validators: [Validators.required, Validators.min(1), Validators.max(12)] })
+    })
+
+    let data: ISellerReport[] = []
 
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource(data);
@@ -160,6 +108,12 @@ export class SellerComponent implements AfterViewInit, OnInit {
         map(value => typeof value === 'string' ? value : value.name),
         map(name => name ? this._filterYear(name.toString()) : this.years.slice())
       );
+    this.yearControl.valueChanges.subscribe(data => {
+      this.formGroup.controls['year'].setValue(data.name)
+    })
+    this.monthControl.valueChanges.subscribe(data => {
+      this.formGroup.controls['month'].setValue(data.id)
+    })
   }
 
   ngAfterViewInit(): void {
@@ -194,5 +148,20 @@ export class SellerComponent implements AfterViewInit, OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  sendRequest() {
+    this.http.post<IApiResponse<Array<ISellerReport>>>(`${environment.apiUrl}/Seller/Report`, 
+      // {
+      //   "year": 0,
+      //   "month": 0
+      // }
+      {
+        ...this.formGroup.value
+      }
+    ).subscribe(resp => {
+      this.dataSource = new MatTableDataSource(resp.data);
+      this.ngAfterViewInit()
+    })
   }
 }

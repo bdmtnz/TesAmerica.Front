@@ -4,23 +4,28 @@
             <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
         </mat-form-field>
         <div class="seller-buttons">
-            <mat-form-field class="example-full-width">
-                <input type="text" placeholder="Mes" matInput [formControl]="monthControl" [matAutocomplete]="autoMonth">
-                <mat-autocomplete #autoMonth="matAutocomplete" [displayWith]="displayFn">
-                  <mat-option *ngFor="let option of filteredMonthOptions | async" [value]="option">
-                    {{option.name}}
-                  </mat-option>
-                </mat-autocomplete>
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-                <input type="text" placeholder="Año" matInput [formControl]="yearControl" [matAutocomplete]="autoYear">
-                <mat-autocomplete #autoYear="matAutocomplete" [displayWith]="displayYearFn">
-                  <mat-option *ngFor="let option of filteredYearOptions | async" [value]="option">
-                    {{option.name}}
-                  </mat-option>
-                </mat-autocomplete>
-            </mat-form-field>
-            <button mat-icon-button>
+            <form>
+                <mat-form-field>
+                    <input type="text" placeholder="Mes" matInput [formControl]="monthControl" [matAutocomplete]="autoMonth">
+                    <mat-autocomplete #autoMonth="matAutocomplete" [displayWith]="displayFn">
+                      <mat-option *ngFor="let option of filteredMonthOptions | async" [value]="option">
+                        {{option.name}}
+                      </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field>
+                    <input type="text" placeholder="Año" matInput [formControl]="yearControl" [matAutocomplete]="autoYear">
+                    <mat-autocomplete #autoYear="matAutocomplete" [displayWith]="displayYearFn">
+                      <mat-option *ngFor="let option of filteredYearOptions | async" [value]="option">
+                        {{option.name}}
+                      </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </form>
+            <button 
+                mat-icon-button
+                (click)="sendRequest()"
+            >
                 <mat-icon>send</mat-icon>
             </button>
         </div>
