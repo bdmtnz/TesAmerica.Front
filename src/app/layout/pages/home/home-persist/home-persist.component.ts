@@ -1,5 +1,5 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,7 +9,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Observable, map, startWith } from 'rxjs';
+import { IItem } from '../../../../shared/models/item';
+import { MatSort } from '@angular/material/sort';
 
 interface Item {
   id: string,
@@ -33,17 +36,25 @@ interface Item {
     MatButtonModule,
     MatDatepickerModule,
     MatAutocompleteModule,
+    MatTableModule,
     AsyncPipe
   ],
   templateUrl: './home-persist.component.html',
   styleUrl: './home-persist.component.scss'
 })
-export class HomePersistComponent implements OnInit {
+export class HomePersistComponent implements OnInit, AfterViewInit {
+  displayedColumns: string[] = ['productId', 'price', 'quantity', 'subtotal'];
+  dataSource: MatTableDataSource<IItem>;
+
+  @ViewChild(MatSort) sort!: MatSort;
+
   clientId: FormControl
   sellerId: FormControl
   productId: FormControl
   firstFormGroup: FormGroup
   secondFormGroup: FormGroup
+
+  data: IItem[] = []
   
   filteredClientOptions!: Observable<Item[]>;
   filteredSellerOptions!: Observable<Item[]>;
@@ -81,6 +92,9 @@ export class HomePersistComponent implements OnInit {
       quantity: new FormControl({ value: 1, disabled: false}, { validators: [ Validators.required, Validators.min(1) ] }),
       subtotal: new FormControl({ value: 0, disabled: true}, { validators: [ Validators.required ] })
     })
+
+    // Assign the data to the data source for the table to render
+    this.dataSource = new MatTableDataSource(this.data);
   }
 
   ngOnInit(): void {
@@ -114,6 +128,7 @@ export class HomePersistComponent implements OnInit {
     this.productId.valueChanges.subscribe(data => {
       let price = Number(data.tag)
       let quantity = Number(this.secondFormGroup.controls['quantity'].value)
+      this.secondFormGroup.patchValue({ 'productId': data.id })
       this.secondFormGroup.patchValue({ 'price': price })
       this.secondFormGroup.patchValue({ 'subtotal': Number(price * quantity)  })
     })
@@ -124,6 +139,10 @@ export class HomePersistComponent implements OnInit {
     this.secondFormGroup.valueChanges.subscribe(data => {
       console.log('2do Form:', data)
     })
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
   }
 
   displayFn(item: Item): string {
@@ -137,9 +156,31 @@ export class HomePersistComponent implements OnInit {
   }
 
   addItem() {
+    if(this.secondFormGroup.invalid) {
+      this.secondFormGroup.markAllAsTouched()
+      return
+    }
     let item = {
-      ...this.secondFormGroup.value
+      ...this.secondFormGroup.value,
+      price: this.secondFormGroup.controls['price'].value,
+      quantity: this.secondFormGroup.controls['quantity'].value,
+      subtotal: this.secondFormGroup.controls['subtotal'].value
     }
     console.log('Agregando item:', item)
+    this.data.push(item)    
+    this.dataSource = new MatTableDataSource(this.data);
+    this.secondFormGroup.reset()
+    this.productId.reset()
+  }
+
+  submit() {
+    if(this.data.length <= 0) {
+      this.secondFormGroup.reset()
+      this.productId.reset()
+      this.secondFormGroup.markAllAsTouched()
+      return
+    }
+    //Se envía la petición
+    console.log('Enviando petición')
   }
 }
