@@ -1,0 +1,21 @@
+.home-selector {
+    width: 100%;
+
+    .home-options {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    table {
+        width: 100%;
+    }
+    
+    .mat-form-field {
+        font-size: 14px;
+        width: 100%;
+    }
+    
+    td, th {
+        width: 25%;
+    }
+}
