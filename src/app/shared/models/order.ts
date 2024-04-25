@@ -2,5 +2,6 @@ export interface IOrder {
     id: string,
     clientId: string,
     date: Date,
-    sellerId: string
+    sellerId: string,
+    subtotal: number
 }

@@ -1,5 +1,5 @@
 <div class="home-persist-selector">
-    <mat-horizontal-stepper labelPosition="bottom" #stepper [linear]="!true">
+    <mat-horizontal-stepper labelPosition="bottom" #stepper [linear]="true">
         <mat-step [stepControl]="firstFormGroup">
             <form [formGroup]="firstFormGroup">
                 <ng-template matStepLabel>Pedido</ng-template>
@@ -72,7 +72,7 @@
                   <!-- Name Column -->
                   <ng-container matColumnDef="price">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Precio </th>
-                    <td mat-cell *matCellDef="let row"> {{row.price}} </td>
+                    <td mat-cell *matCellDef="let row"> {{row.price | currency}} </td>
                   </ng-container>
               
                   <!-- Color Column -->
@@ -84,7 +84,7 @@
                   <!-- Color Column -->
                   <ng-container matColumnDef="subtotal">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Subtotal </th>
-                    <td mat-cell *matCellDef="let row"> {{row.subtotal}} </td>
+                    <td mat-cell *matCellDef="let row"> {{row.subtotal | currency}} </td>
                   </ng-container>
                                 
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

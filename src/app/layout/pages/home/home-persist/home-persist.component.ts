@@ -1,4 +1,4 @@
-import { AsyncPipe, CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule, CurrencyPipe } from '@angular/common';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -45,7 +45,8 @@ interface Item {
     MatDatepickerModule,
     MatAutocompleteModule,
     MatTableModule,
-    AsyncPipe
+    AsyncPipe,
+    CurrencyPipe
   ],
   templateUrl: './home-persist.component.html',
   styleUrl: './home-persist.component.scss'

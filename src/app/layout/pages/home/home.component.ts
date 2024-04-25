@@ -14,6 +14,7 @@ import { HttpClient } from '@angular/common/http';
 import { IApiResponse } from '../../../shared/models/api';
 import { ISellerReport } from '../../../shared/models/seller';
 import { environment } from '../../../../environments/environment';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -25,13 +26,14 @@ import { environment } from '../../../../environments/environment';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    CurrencyPipe
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements AfterViewInit, OnInit {
-  displayedColumns: string[] = ['id', 'clientId', 'sellerId', 'date'];
+  displayedColumns: string[] = ['id', 'clientId', 'sellerId', 'date', 'subtotal'];
   dataSource: MatTableDataSource<IOrder>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
