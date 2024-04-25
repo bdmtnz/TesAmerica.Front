@@ -3,6 +3,7 @@ import { RouterModule, RouterOutlet, Routes } from "@angular/router";
 import { LayoutComponent } from "./layout.component";
 import { CommonModule } from "@angular/common";
 import { HeaderComponent } from "../shared/components/header/header.component";
+import { BreadcrumbComponent } from "../shared/components/breadcrumb/breadcrumb.component";
 
 export const layoutRoutes: Routes = [
     {
@@ -31,7 +32,8 @@ export const layoutRoutes: Routes = [
         CommonModule,        
         RouterOutlet,
         RouterModule.forChild(layoutRoutes),
-        HeaderComponent
+        HeaderComponent,
+        BreadcrumbComponent
     ]
 })
 export class LayoutRoutesModule { }

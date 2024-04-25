@@ -1,0 +1,15 @@
+.breadcrumb-selector{
+    padding: 0 10%;
+
+    .elements {
+        display: flex;
+        align-items: center;
+        padding: 20px 0;
+        gap: 20px;
+        border-bottom: 1px solid gray;
+
+        h4 {
+            margin: 0;
+        }
+    }
+}
