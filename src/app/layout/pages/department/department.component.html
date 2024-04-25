@@ -4,17 +4,22 @@
             <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
         </mat-form-field>
         <div class="department-buttons">
-            <mat-form-field>
-                <input matInput [matDatepicker]="dpStart" placeholder="Inicio">
-                <mat-datepicker-toggle matSuffix [for]="dpStart"></mat-datepicker-toggle>
-                <mat-datepicker #dpStart disabled="false"></mat-datepicker>
-              </mat-form-field>
-              <mat-form-field>
-                <input matInput [matDatepicker]="dpEnd" placeholder="Final">
-                <mat-datepicker-toggle matSuffix [for]="dpEnd"></mat-datepicker-toggle>
-                <mat-datepicker #dpEnd disabled="false"></mat-datepicker>
-              </mat-form-field>
-            <button mat-icon-button>
+            <form [formGroup]="formGroup">
+                <mat-form-field>
+                    <input matInput [matDatepicker]="dpStart" placeholder="Inicio" formControlName="start">
+                    <mat-datepicker-toggle matSuffix [for]="dpStart"></mat-datepicker-toggle>
+                    <mat-datepicker #dpStart disabled="false"></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput [matDatepicker]="dpEnd" placeholder="Final" formControlName="end">
+                    <mat-datepicker-toggle matSuffix [for]="dpEnd"></mat-datepicker-toggle>
+                    <mat-datepicker #dpEnd disabled="false"></mat-datepicker>
+                </mat-form-field>
+            </form>
+            <button 
+                mat-icon-button
+                (click)="submit()"
+            >
                 <mat-icon>send</mat-icon>
             </button>
         </div>
