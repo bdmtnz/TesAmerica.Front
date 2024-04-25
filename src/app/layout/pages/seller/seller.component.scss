@@ -1,0 +1,30 @@
+.seller-selector {
+    width: 100%;
+
+    .seller-options {
+        display: flex;
+        justify-content: space-between;
+
+        .seller-buttons {
+            display: flex;
+            gap: 10px;
+
+            button {
+                margin-top: 5px;
+            }
+        }
+    }
+
+    table {
+        width: 100%;
+    }
+    
+    .mat-form-field {
+        font-size: 14px;
+        width: 100%;
+    }
+    
+    td, th {
+        width: 25%;
+    }
+}

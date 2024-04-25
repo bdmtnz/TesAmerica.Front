@@ -1,1 +1,50 @@
-<p>department works!</p>
+<div class="department-selector">
+    <div class="department-options">
+        <mat-form-field>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
+        </mat-form-field>
+        <div class="department-buttons">
+            <mat-form-field>
+                <input matInput [matDatepicker]="dpStart" placeholder="Inicio">
+                <mat-datepicker-toggle matSuffix [for]="dpStart"></mat-datepicker-toggle>
+                <mat-datepicker #dpStart disabled="false"></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput [matDatepicker]="dpEnd" placeholder="Final">
+                <mat-datepicker-toggle matSuffix [for]="dpEnd"></mat-datepicker-toggle>
+                <mat-datepicker #dpEnd disabled="false"></mat-datepicker>
+              </mat-form-field>
+            <button mat-icon-button>
+                <mat-icon>send</mat-icon>
+            </button>
+        </div>
+    </div>
+      
+    <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>      
+          <!-- Progress Column -->
+          <ng-container matColumnDef="departmentId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+            <td mat-cell *matCellDef="let row"> {{row.departmentId}} </td>
+          </ng-container>
+      
+          <!-- Name Column -->
+          <ng-container matColumnDef="departmentName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+            <td mat-cell *matCellDef="let row"> {{row.departmentName}} </td>
+          </ng-container>
+      
+          <!-- Color Column -->
+          <ng-container matColumnDef="sales">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Ventas </th>
+            <td mat-cell *matCellDef="let row"> {{row.sales}} </td>
+          </ng-container>
+      
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+          </tr>
+        </table>
+      
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    </div>
+</div>
