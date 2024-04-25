@@ -10,6 +10,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { HomePersistModalComponent } from './components/home-persist-modal/home-persist-modal.component';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { IApiResponse } from '../../../shared/models/api';
+import { ISellerReport } from '../../../shared/models/seller';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -26,7 +30,7 @@ import { Router } from '@angular/router';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent implements AfterViewInit {
+export class HomeComponent implements AfterViewInit, OnInit {
   displayedColumns: string[] = ['id', 'clientId', 'sellerId', 'date'];
   dataSource: MatTableDataSource<IOrder>;
 
@@ -35,67 +39,17 @@ export class HomeComponent implements AfterViewInit {
 
   constructor(
     public dialog: MatDialog,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly http: HttpClient
   ) {
-    let data: IOrder[] = [
-      {
-        clientId: '1',
-        date: new Date(),
-        id: '2',
-        sellerId: '3'
-      },
-      {
-        clientId: '1',
-        date: new Date(),
-        id: 'lol',
-        sellerId: '3'
-      },
-      {
-        clientId: '1',
-        date: new Date(),
-        id: '2',
-        sellerId: '3'
-      },
-      {
-        clientId: '1',
-        date: new Date(),
-        id: '2',
-        sellerId: '3'
-      },
-      {
-        clientId: '1',
-        date: new Date(),
-        id: '2',
-        sellerId: '3'
-      },
-      {
-        clientId: '1',
-        date: new Date(),
-        id: '2',
-        sellerId: '3'
-      },
-      {
-        clientId: '1',
-        date: new Date(),
-        id: '2',
-        sellerId: '3'
-      },
-      {
-        clientId: '8',
-        date: new Date(),
-        id: '2',
-        sellerId: '3'
-      },
-      {
-        clientId: '1',
-        date: new Date(),
-        id: '2',
-        sellerId: '3'
-      }
-    ]
+    let data: IOrder[] = []
 
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource(data);
+  }
+
+  ngOnInit(): void {
+    this.sendRequest()
   }
 
   ngAfterViewInit(): void {
@@ -126,5 +80,17 @@ export class HomeComponent implements AfterViewInit {
 
   goToPersist() {
     this.router.navigateByUrl('/persist')
+  }
+
+  reload() {
+    this.sendRequest()
+  }
+
+  sendRequest() {
+    this.http.get<IApiResponse<Array<IOrder>>>(`${environment.apiUrl}/Order`)
+    .subscribe(resp => {
+      this.dataSource = new MatTableDataSource(resp.data);
+      this.ngAfterViewInit()
+    })
   }
 }

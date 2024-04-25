@@ -6,6 +6,12 @@
         <div class="home-buttons">
             <button 
                 mat-icon-button
+                (click)="reload()"
+            >
+                <mat-icon>refresh</mat-icon>
+            </button>
+            <button 
+                mat-icon-button
                 (click)="goToPersist()"
             >
                 <mat-icon>add</mat-icon>
