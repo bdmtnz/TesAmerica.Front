@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { PathTitle } from '../../models/utils';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -16,15 +17,27 @@ import { Location } from '@angular/common';
 })
 export class BreadcrumbComponent implements DoCheck{
   title: string = ''
+  path: string = ''
 
-  constructor(private readonly location: Location) {    
-  }
+  constructor(
+    private readonly location: Location,
+    private readonly router: Router
+  ) { }
 
   ngDoCheck(): void {
-    this.title = PathTitle[window.location.pathname]
+    this.path = window.location.pathname
+    this.title = PathTitle[this.path]
+  }
+
+  get showBack() {
+    return this.path === '/' ? false : true
   }
 
   goBack() {
     this.location.back()
+  }
+
+  goHome() {
+    this.router.navigateByUrl('/')
   }
 }
