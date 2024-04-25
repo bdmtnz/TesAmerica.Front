@@ -13,6 +13,14 @@ import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/
 import { Observable, map, startWith } from 'rxjs';
 import { IItem } from '../../../../shared/models/item';
 import { MatSort } from '@angular/material/sort';
+import { HttpClient } from '@angular/common/http';
+import { IOrder } from '../../../../shared/models/order';
+import { environment } from '../../../../../environments/environment';
+import { IApiResponse } from '../../../../shared/models/api';
+import { IClient } from '../../../../shared/models/client';
+import { ISeller } from '../../../../shared/models/seller';
+import { IProduct } from '../../../../shared/models/product';
+import { Router } from '@angular/router';
 
 interface Item {
   id: string,
@@ -60,21 +68,14 @@ export class HomePersistComponent implements OnInit, AfterViewInit {
   filteredSellerOptions!: Observable<Item[]>;
   filteredProductOptions!: Observable<Item[]>;
 
-  clients: Item[] = [
-    {id: '', name: 'Seleccione'},
-    {id: '4', name: 'Cliente 1'},
-  ];
-
-  sellers: Item[] = [
-    {id: '1', name: 'Vendedor 1'},
-  ];
-
-  products: Item[] = [
-    {id: '1', name: 'Producto 1', tag: '20000'},
-  ];
+  clients: Item[] = [];
+  sellers: Item[] = [];
+  products: Item[] = [];
 
   constructor(
-    private readonly formBuilder: FormBuilder
+    private readonly formBuilder: FormBuilder,
+    private readonly http: HttpClient,
+    private readonly router: Router
   ) {
     this.clientId = new FormControl({ value: undefined, disabled: false }, { validators: [ Validators.required ] })
     this.sellerId = new FormControl({ value: undefined, disabled: false }, { validators: [ Validators.required ] })
@@ -139,6 +140,9 @@ export class HomePersistComponent implements OnInit, AfterViewInit {
     this.secondFormGroup.valueChanges.subscribe(data => {
       console.log('2do Form:', data)
     })
+    this.sendClientRequest("")
+    this.sendSellerRequest("")
+    this.sendProductRequest("")
   }
 
   ngAfterViewInit(): void {
@@ -173,6 +177,58 @@ export class HomePersistComponent implements OnInit, AfterViewInit {
     this.productId.reset()
   }
 
+  sendClientRequest(searchWord: string) {
+    this.http.post<IApiResponse<Array<IClient>>>(`${environment.apiUrl}/Client/GetByName`, 
+      {
+        "name": searchWord
+      }
+    )
+    .subscribe(resp => {
+      this.clients = resp.data
+    })
+  }
+
+  sendSellerRequest(searchWord: string) {
+    this.http.post<IApiResponse<Array<ISeller>>>(`${environment.apiUrl}/Seller/GetByName`, 
+      {
+        "name": searchWord
+      }
+    )
+    .subscribe(resp => {
+      this.sellers = resp.data
+    })
+  }
+
+  sendProductRequest(searchWord: string) {
+    this.http.post<IApiResponse<Array<IProduct>>>(`${environment.apiUrl}/Product`, 
+      {
+        "name": searchWord
+      }
+    )
+    .subscribe(resp => {
+      this.products = resp.data.map(item => {
+        return {
+          id: item.id,
+          name: item.name,
+          tag: item.price.toString()
+        }
+      })
+    })
+  }
+
+  sendRequest(order: IOrder, items: IItem[]) {
+    this.http.post<IApiResponse<any>>(`${environment.apiUrl}/Order`, 
+      {
+        "order": order,
+        "items": items
+      }
+    )
+    .subscribe(resp => {
+      console.log(resp)
+      this.router.navigateByUrl('/')
+    })
+  }
+
   submit() {
     if(this.data.length <= 0) {
       this.secondFormGroup.reset()
@@ -182,5 +238,6 @@ export class HomePersistComponent implements OnInit, AfterViewInit {
     }
     //Se envía la petición
     console.log('Enviando petición')
+    this.sendRequest(this.firstFormGroup.value, this.data)
   }
 }

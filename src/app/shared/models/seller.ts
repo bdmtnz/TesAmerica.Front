@@ -1,10 +1,7 @@
 export interface ISeller {
-    sellerId: string,
-    sellerName: string,
-    subtotal: number,
-    comission: number,
-    year: number,
-    month: number
+    id: string,
+    name: string,
+    state: string
 }
 
 export interface ISellerReport {
