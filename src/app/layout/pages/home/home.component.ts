@@ -7,6 +7,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { HomePersistModalComponent } from './components/home-persist-modal/home-persist-modal.component';
 
 @Component({
   selector: 'app-home',
@@ -30,7 +32,9 @@ export class HomeComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor() {
+  constructor(
+    public dialog: MatDialog
+  ) {
     let data: IOrder[] = [
       {
         clientId: '1',
@@ -104,5 +108,17 @@ export class HomeComponent implements AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(HomePersistModalComponent, {
+      // width: '250px',
+      data: {name: 'Name value', animal: 'Animal value'}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed with this result: ', result);
+      // this.animal = result;
+    });
   }
 }

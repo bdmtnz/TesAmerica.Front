@@ -4,7 +4,10 @@
             <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
         </mat-form-field>
         <div class="home-buttons">
-            <button mat-icon-button>
+            <button 
+                mat-icon-button
+                (click)="openDialog()"
+            >
                 <mat-icon>add</mat-icon>
             </button>
         </div>
