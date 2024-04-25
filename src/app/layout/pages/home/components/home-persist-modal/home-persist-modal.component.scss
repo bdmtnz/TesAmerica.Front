@@ -1,4 +1,11 @@
 .home-persist-modal-selector {
+    form {
+        .row {
+            width: 100%;
+            display: flex;
+            gap: 10px
+        }
+    }
 
     .buttons {
         width: 100%;

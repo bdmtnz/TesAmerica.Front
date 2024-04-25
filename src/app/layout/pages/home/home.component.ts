@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { HomePersistModalComponent } from './components/home-persist-modal/home-persist-modal.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -33,7 +34,8 @@ export class HomeComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private readonly router: Router
   ) {
     let data: IOrder[] = [
       {
@@ -120,5 +122,9 @@ export class HomeComponent implements AfterViewInit {
       console.log('The dialog was closed with this result: ', result);
       // this.animal = result;
     });
+  }
+
+  goToPersist() {
+    this.router.navigateByUrl('/persist')
   }
 }

@@ -1,10 +1,25 @@
 <div class="home-persist-modal-selector">
-    <h1 mat-dialog-title>Hi {{data.name}}</h1>
+    <h1 mat-dialog-title>Registro de pedido</h1>
     <div mat-dialog-content>
-    <p>What's your favorite animal?</p>
-    <mat-form-field>
-        <input matInput [(ngModel)]="data.animal">
-    </mat-form-field>
+        <p>Por favor ingrese los datos</p>
+        <form [formGroup]="formGroup">        
+            <div class="row">
+                <mat-form-field>
+                    <input matInput formControlName="id">
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput formControlName="id">
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <mat-form-field>
+                    <input matInput formControlName="id">
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput formControlName="id">
+                </mat-form-field>
+            </div>
+        </form>
     </div>
     <div class="buttons" mat-dialog-actions>
         <button mat-button (click)="onNoClick()">No Thanks</button>

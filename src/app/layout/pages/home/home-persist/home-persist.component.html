@@ -1,0 +1,77 @@
+<div class="home-persist-selector">
+    <mat-horizontal-stepper labelPosition="bottom" #stepper [linear]="!true">
+        <mat-step [stepControl]="firstFormGroup">
+            <form [formGroup]="firstFormGroup">
+                <ng-template matStepLabel>Pedido</ng-template>
+                <div class="row">
+                    <mat-form-field>
+                        <input type="text" placeholder="Cliente" matInput [formControl]="clientId" [matAutocomplete]="autoClient">
+                        <mat-autocomplete #autoClient="matAutocomplete" [displayWith]="displayFn">
+                          <mat-option *ngFor="let option of filteredClientOptions | async" [value]="option">
+                            {{option.name}}
+                          </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input type="text" placeholder="Vendedor" matInput [formControl]="sellerId" [matAutocomplete]="autoSeller">
+                        <mat-autocomplete #autoSeller="matAutocomplete" [displayWith]="displayFn">
+                          <mat-option *ngFor="let option of filteredSellerOptions | async" [value]="option">
+                            {{option.name}}
+                          </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput [matDatepicker]="dpDate" placeholder="Fecha" formControlName="date">
+                        <mat-datepicker-toggle matSuffix [for]="dpDate"></mat-datepicker-toggle>
+                        <mat-datepicker #dpDate disabled="false"></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="secondFormGroup">
+            <form [formGroup]="secondFormGroup">
+                <ng-template matStepLabel>Items</ng-template>
+                <div class="row">
+                    <mat-form-field>
+                        <input type="text" placeholder="Producto" matInput [formControl]="productId" [matAutocomplete]="autoProduct">
+                        <mat-autocomplete #autoProduct="matAutocomplete" [displayWith]="displayFn">
+                          <mat-option *ngFor="let option of filteredProductOptions | async" [value]="option">
+                            {{option.name}}
+                          </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input type="number" placeholder="Precio" matInput formControlName="price">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input type="number" placeholder="Cantidad" matInput formControlName="quantity">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input type="number" placeholder="Subtotal" matInput formControlName="subtotal">
+                    </mat-form-field>
+                </div>
+                <div class="row buttons">
+                    <button 
+                        mat-button
+                        (click)="addItem()"
+                    >Agregar</button>
+                </div>
+                <div>
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Done</ng-template>
+            You are now done.
+            <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button (click)="stepper.reset()">Reset</button>
+            </div>
+        </mat-step>
+    </mat-horizontal-stepper>
+</div>

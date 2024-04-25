@@ -13,6 +13,10 @@ export const layoutRoutes: Routes = [
             {
                 path: '',
                 loadComponent: () => import('./pages/home/home.component').then(c => c.HomeComponent)
+            },
+            {
+                path: 'persist',
+                loadComponent: () => import('./pages/home/home-persist/home-persist.component').then(c => c.HomePersistComponent)
             },      
             {
                 path: 'seller',
